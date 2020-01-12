@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SortingAlgorithms extends ChangeNotifier {
-  final List<int> array;
-  final List<Color> colors;
+  List<int> array;
+  List<Color> colors;
+  double speedSliderValue;
   
-  SortingAlgorithms({this.array, this.colors});
+  SortingAlgorithms({this.array, this.colors, this.speedSliderValue});
 
   sort() async{
     for(int i = 0; i < this.array.length; i++)
