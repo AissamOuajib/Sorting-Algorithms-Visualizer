@@ -17,7 +17,7 @@ class SortingAlgorithms extends ChangeNotifier {
     this.colors[i] = Colors.red;
     this.colors[j] = Colors.red;
     notifyListeners();
-    await Future.delayed(Duration(milliseconds: 40), (){
+    await Future.delayed(Duration(milliseconds: (10 + 190*(1 - speedSliderValue)).round()), (){
       int temp = this.array[i];
       this.array[i] = this.array[j];
       this.array[j] = temp;
