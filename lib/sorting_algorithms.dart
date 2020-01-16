@@ -26,4 +26,26 @@ class SortingAlgorithms extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  quickSort(left, right) async{
+    int index = await _partition(left, right);
+    if (left < index - 1) await quickSort( left, index - 1);
+    if (index < right) await quickSort(index, right);
+  }
+
+  _partition(left, right) async{
+    int pivot = this.array[(right + left)~/2];
+    int i = left;
+    int j = right;
+    while (i <= j) {
+      while (this.array[i] < pivot) i++;
+      while (this.array[j] > pivot) j--;
+      if (i <= j) {
+        await swap(i, j);
+        i++;
+        j--;
+      }
+    }
+    return i;
+  }
 }

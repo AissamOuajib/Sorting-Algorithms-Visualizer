@@ -26,6 +26,11 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
     sortingAlgorithms.addListener(() => setState((){}));
   }
 
+  _sort(){
+    if(sortType == 'Normal Sort') sortingAlgorithms.sort();
+    else if(sortType == 'Quick Sort') sortingAlgorithms.quickSort(0, sortingAlgorithms.array.length-1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -116,7 +121,7 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => sortingAlgorithms.sort(),
+        onPressed: _sort,
         child: Icon(Icons.sort),
       ),
     );
