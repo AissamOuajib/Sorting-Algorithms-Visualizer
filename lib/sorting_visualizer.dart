@@ -34,7 +34,7 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
 
   _sort() {
     if (sortType == 'Normal Sort')
-      sortingAlgorithms.sort();
+      sortingAlgorithms.normalSort();
     else if (sortType == 'Quick Sort')
       sortingAlgorithms.quickSort();
     else if (sortType == 'Merge Sort') sortingAlgorithms.mergeSort();

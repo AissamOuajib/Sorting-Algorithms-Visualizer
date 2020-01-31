@@ -7,15 +7,14 @@ class SortingAlgorithms extends ChangeNotifier {
 
   SortingAlgorithms({this.array, this.colors, this.speedSliderValue});
 
-  sort() async {
+  normalSort() async {
     for (int i = 0; i < this.array.length; i++)
       for (int j = i + 1; j < this.array.length; j++)
-        if (this.array[i] > this.array[j]) await swap(i, j);
-    this.colors = List<Color>.generate(50, (i) => Colors.green);
-    notifyListeners();
+        if (this.array[i] > this.array[j]) await _swap(i, j);
+    _onSorted();
   }
 
-  swap(int i, int j) async {
+  _swap(int i, int j) async {
     this.colors[i] = Colors.red;
     this.colors[j] = Colors.red;
     notifyListeners();
@@ -30,41 +29,38 @@ class SortingAlgorithms extends ChangeNotifier {
   }
 
   quickSort() async {
-    await qckSort(0, this.array.length-1);
-    this.colors = List<Color>.generate(50, (i) => Colors.green);
-    notifyListeners();
+    await _quickSort(0, this.array.length-1);
+    _onSorted();
   }
 
-  qckSort(left, right) async {
+  _quickSort(int left, int right) async {
     int index = await _partition(left, right);
-    if (left < index - 1) await qckSort(left, index - 1);
-    if (index < right) await qckSort(index, right);
+    if (left < index - 1) await _quickSort(left, index - 1);
+    if (index < right) await _quickSort(index, right);
   }
 
-  _partition(left, right) async {
+  _partition(int left, int right) async {
     int pivot = this.array[(right + left) ~/ 2];
-    int i = left;
-    int j = right;
-    while (i <= j) {
-      while (this.array[i] < pivot) i++;
-      while (this.array[j] > pivot) j--;
-      if (i <= j) {
-        await swap(i, j);
-        i++;
-        j--;
+    while (left <= right) {
+      while (this.array[left] < pivot) left++;
+      while (this.array[right] > pivot) right--;
+      if (left <= right) {
+        await _swap(left, right);
+        left++;
+        right--;
       }
     }
-    return i;
+    return left;
   }
 
-  merge(int leftIndex, int middleIndex, int rightIndex) async {
+  _merge(int leftIndex, int middleIndex, int rightIndex) async {
     //here we calculate the size of left array and the right array.
     int leftSize = middleIndex - leftIndex + 1;
     int rightSize = rightIndex - middleIndex;
 
     //here we create a temporary array for each one of the left and right arrays.
-    List leftList = new List(leftSize);
-    List rightList = new List(rightSize);
+    List<int> leftList = new List<int>(leftSize);
+    List<int> rightList = new List<int>(rightSize);
 
     //Here we fill those temporary arrays.
     for (int i = 0; i < leftSize; i++) leftList[i] = this.array[leftIndex + i];
@@ -98,44 +94,43 @@ class SortingAlgorithms extends ChangeNotifier {
     }
 
     //Here we copy whatever is left from each array.
-    while (i < leftSize) {
+    await _copyWhatIsLeft(i, index, leftSize, leftList);
+    await _copyWhatIsLeft(j, index, rightSize, rightList);
+  }
+
+  _copyWhatIsLeft(int i, int index, int size, List<int> list) async {
+    while (i < size) {
       this.colors[index] = Colors.red;
       notifyListeners();
       await Future.delayed(Duration(milliseconds: 10 + 190 * (1 - speedSliderValue).round()), () {
-        this.array[index] = leftList[i];
+        this.array[index] = list[i];
         i++;
         this.colors[index] = Colors.purple;
         index++;
         notifyListeners();
       });
     }
-    while (j < rightSize) {
-      this.colors[index] = Colors.red;
-      notifyListeners();
-      await Future.delayed(Duration(milliseconds: 10 + 190 * (1 - speedSliderValue).round()), () {
-        this.array[index] = rightList[j];
-        j++;
-        this.colors[index] = Colors.purple;
-        index++;
-        notifyListeners();
-      });
-    }
+
   }
 
   mergeSort() async {
-    await mrgSort(0, this.array.length - 1);
-    this.colors = List<Color>.generate(50, (i) => Colors.green);
-    notifyListeners();
+    await _mergeSort(0, this.array.length - 1);
+    _onSorted();
   }
 
-  mrgSort(int leftIndex, int rightIndex) async {
+  _mergeSort(int leftIndex, int rightIndex) async {
     if(leftIndex >= rightIndex) return;
 
     int middleIndex = (rightIndex + leftIndex) ~/ 2;
 
-    await mrgSort(leftIndex, middleIndex);
-    await mrgSort(middleIndex + 1, rightIndex);
+    await _mergeSort(leftIndex, middleIndex);
+    await _mergeSort(middleIndex + 1, rightIndex);
 
-    await merge(leftIndex, middleIndex, rightIndex);
+    await _merge(leftIndex, middleIndex, rightIndex);
+  }
+
+  _onSorted() {
+    this.colors = List<Color>.generate(this.array.length, (i) => Colors.green);
+    notifyListeners();
   }
 }
