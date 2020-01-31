@@ -12,23 +12,32 @@ class SortingVisualizer extends StatefulWidget {
 class _SortingVisualizerState extends State<SortingVisualizer> {
   double lenghtSliderValue = 0.5;
   String sortType = 'Normal Sort';
-  List<String> sortTypes = ['Normal Sort', 'Merge Sort','Quick Sort', 'Heap Sort', 'Bubble Sort',];
+  List<String> sortTypes = [
+    'Normal Sort',
+    'Merge Sort',
+    'Quick Sort',
+    'Heap Sort',
+    'Bubble Sort',
+  ];
   bool isSorting = false;
   SortingAlgorithms sortingAlgorithms;
   @override
   void initState() {
     super.initState();
     sortingAlgorithms = SortingAlgorithms(
-      array: List<int>.generate(50, (i) => Random().nextInt(90)+10),
+      array: List<int>.generate(50, (i) => Random().nextInt(90) + 10),
       colors: List<Color>.generate(50, (i) => Colors.deepPurple),
       speedSliderValue: .5,
     );
-    sortingAlgorithms.addListener(() => setState((){}));
+    sortingAlgorithms.addListener(() => setState(() {}));
   }
 
-  _sort(){
-    if(sortType == 'Normal Sort') sortingAlgorithms.sort();
-    else if(sortType == 'Quick Sort') sortingAlgorithms.quickSort(0, sortingAlgorithms.array.length-1);
+  _sort() {
+    if (sortType == 'Normal Sort')
+      sortingAlgorithms.sort();
+    else if (sortType == 'Quick Sort')
+      sortingAlgorithms.quickSort();
+    else if (sortType == 'Merge Sort') sortingAlgorithms.mergeSort();
   }
 
   @override
@@ -44,20 +53,25 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Container(width: 120,child: Text('Array Lenght : ')),
+                    Container(width: 120, child: Text('Array Lenght : ')),
                     Expanded(
                       child: Slider.adaptive(
                         activeColor: Colors.black,
                         value: lenghtSliderValue,
-                        onChanged: (newValue){
+                        onChanged: (newValue) {
                           // sortingAlgorithms.generatedNewArray = true;
                           isSorting = false;
                           // timer.resetTimer();
                           setState(() {
                             lenghtSliderValue = newValue;
-                            sortingAlgorithms.array.length = (newValue*120 + 10).toInt();
-                            sortingAlgorithms.array = List<int>.generate(sortingAlgorithms.array.length, (i) => Random().nextInt(90)+10);
-                            sortingAlgorithms.colors = List<Color>.generate(sortingAlgorithms.array.length, (i) => Colors.deepPurple);
+                            sortingAlgorithms.array.length =
+                                (newValue * 120 + 10).toInt();
+                            sortingAlgorithms.array = List<int>.generate(
+                                sortingAlgorithms.array.length,
+                                (i) => Random().nextInt(90) + 10);
+                            sortingAlgorithms.colors = List<Color>.generate(
+                                sortingAlgorithms.array.length,
+                                (i) => Colors.deepPurple);
                           });
                         },
                       ),
@@ -66,12 +80,12 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
                 ),
                 Row(
                   children: <Widget>[
-                    Container(width: 120,child: Text('Sorting Speed : ')),
+                    Container(width: 120, child: Text('Sorting Speed : ')),
                     Expanded(
                       child: Slider.adaptive(
                         activeColor: Colors.black,
                         value: sortingAlgorithms.speedSliderValue,
-                        onChanged: (newValue){
+                        onChanged: (newValue) {
                           setState(() {
                             sortingAlgorithms.speedSliderValue = newValue;
                           });
@@ -88,8 +102,12 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
                         disabledHint: Text(sortType),
                         isExpanded: true,
                         value: sortType,
-                        onChanged: !isSorting ? (String newValue) => setState(() => sortType = newValue):null,
-                        items: sortTypes.map<DropdownMenuItem<String>>((String value) {
+                        onChanged: !isSorting
+                            ? (String newValue) =>
+                                setState(() => sortType = newValue)
+                            : null,
+                        items: sortTypes
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -107,12 +125,13 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(sortingAlgorithms.array.length, (i) => 
-          Expanded(
+        children: List.generate(
+          sortingAlgorithms.array.length,
+          (i) => Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: .6),
               child: Container(
-                height: 3.0*sortingAlgorithms.array[i], 
+                height: 3.0 * sortingAlgorithms.array[i],
                 color: sortingAlgorithms.colors[i],
               ),
             ),
