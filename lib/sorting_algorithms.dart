@@ -4,8 +4,9 @@ class SortingAlgorithms extends ChangeNotifier {
   List<int> array;
   List<Color> colors;
   double speedSliderValue;
+  bool isSorting;
 
-  SortingAlgorithms({this.array, this.colors, this.speedSliderValue});
+  SortingAlgorithms({this.array, this.colors, this.speedSliderValue, isSorting = false});
 
   normalSort() async {
     for (int i = 0; i < this.array.length; i++)

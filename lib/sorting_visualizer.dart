@@ -59,19 +59,12 @@ class _SortingVisualizerState extends State<SortingVisualizer> {
                         activeColor: Colors.black,
                         value: lenghtSliderValue,
                         onChanged: (newValue) {
-                          // sortingAlgorithms.generatedNewArray = true;
                           isSorting = false;
-                          // timer.resetTimer();
                           setState(() {
                             lenghtSliderValue = newValue;
-                            sortingAlgorithms.array.length =
-                                (newValue * 120 + 10).toInt();
-                            sortingAlgorithms.array = List<int>.generate(
-                                sortingAlgorithms.array.length,
-                                (i) => Random().nextInt(90) + 10);
-                            sortingAlgorithms.colors = List<Color>.generate(
-                                sortingAlgorithms.array.length,
-                                (i) => Colors.deepPurple);
+                            sortingAlgorithms.array.length = (newValue * 120 + 10).toInt();
+                            sortingAlgorithms.array = List<int>.generate(sortingAlgorithms.array.length, (i) => Random().nextInt(90) + 10);
+                            sortingAlgorithms.colors = List<Color>.generate(sortingAlgorithms.array.length, (i) => Colors.deepPurple);
                           });
                         },
                       ),
